@@ -101,6 +101,9 @@ install(FILES
 )
 
 # ── Qt style plugin ───────────────────────────────────────
+# NOTE: Plugin target must NOT set AUTOMOC_MOC_NAMESPACE
+# because Q_PLUGIN_METADATA generates a static object that
+# must reside in the global namespace for Qt's plugin loader.
 add_library(lingmo_style MODULE
     plugin/StylePlugin.h
     plugin/StylePlugin.cpp
@@ -111,12 +114,16 @@ target_link_libraries(lingmo_style PRIVATE LingmoStyle Qt6::Widgets)
 
 set_target_properties(lingmo_style PROPERTIES
     AUTOMOC ON
-    AUTOMOC_MOC_NAMESPACE Lingmo
     CXX_VISIBILITY_PRESET hidden
     VISIBILITY_INLINES_HIDDEN ON
 )
 
 install(TARGETS lingmo_style
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/qt6/plugins/styles
+    COMPONENT runtime
+)
+
+install(FILES plugin/lingmo-style.json
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/lingmo/style
     COMPONENT runtime
 )

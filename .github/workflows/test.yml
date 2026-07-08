@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  test-gcc:
     runs-on: ubuntu-24.04
     container: debian:trixie
 
@@ -37,4 +37,37 @@ jobs:
         run: cmake --build build --parallel
 
       - name: Run tests
-        run: ctest --test-dir build --output-on-failure
+        run: ctest --test-dir build --output-on-failure --timeout 60
+
+  test-clang:
+    runs-on: ubuntu-24.04
+    container: debian:trixie
+
+    steps:
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq git
+
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq \
+            cmake ninja-build clang++ libc++-dev \
+            qt6-base-dev qt6-tools-dev \
+            liblingmotheme-dev \
+            libgl1-mesa-dev
+
+      - name: Configure with tests (clang)
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_COMPILER=clang++ \
+            -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure --timeout 60

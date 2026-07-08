@@ -1,2 +1,3 @@
 usr/lib/*/libLingmoStyle.so.*
 usr/lib/*/qt6/plugins/styles/liblingmo_style.so
+usr/share/lingmo/style/lingmo-style.json

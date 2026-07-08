@@ -55,6 +55,7 @@ Development headers and CMake integration for Lingmo Style.
 %license LICENSE
 %{_libdir}/libLingmoStyle.so.%{majver}*
 %{_libdir}/qt6/plugins/styles/liblingmo_style.so
+%{_datadir}/lingmo/style/
 
 %files devel
 %{_includedir}/LingmoStyle/

@@ -1,3 +1,8 @@
 {
-    "Keys": ["lingmo"]
+    "Keys": ["lingmo"],
+    "description": "Lingmo Desktop style for Qt Widgets applications",
+    "version": "1.0.0",
+    "organization": "Lingmo Desktop",
+    "copyright": "Copyright 2026 Lingmo OS Team",
+    "license": "GPL-3.0-or-later"
 }

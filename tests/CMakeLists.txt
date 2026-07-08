@@ -12,3 +12,19 @@ function(add_lingmo_style_test NAME)
 endfunction()
 
 add_lingmo_style_test(tst_Style)
+add_lingmo_style_test(tst_ColorTable)
+
+# StylePlugin test: compiles the plugin source directly so we can
+# test the factory logic without requiring an installed Qt plugin.
+add_executable(tst_StylePlugin
+    tst_StylePlugin.cpp
+    ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin/StylePlugin.h
+    ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin/StylePlugin.cpp
+)
+target_include_directories(tst_StylePlugin PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin
+)
+target_link_libraries(tst_StylePlugin PRIVATE Lingmo::Style Qt6::Test)
+set_target_properties(tst_StylePlugin PROPERTIES UNITY_BUILD OFF)
+add_test(NAME tst_StylePlugin COMMAND tst_StylePlugin)
+set_tests_properties(tst_StylePlugin PROPERTIES TIMEOUT 30)

@@ -7,9 +7,31 @@ on:
     branches: [main]
 
 jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    container: debian:trixie
+    steps:
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq git
+
+      - uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: apt-get update -qq && apt-get install -y -qq clang-format
+
+      - name: Check code style
+        run: |
+          find . \( -name '*.cpp' -o -name '*.h' \) \
+            -exec bash -c 'diff -q "$1" <(clang-format "$1") > /dev/null' _ {} \; -o \
+            -exec bash -c 'echo "Style violation: $1"; exit 1' _ \;
+
   build:
     runs-on: ubuntu-24.04
     container: debian:trixie
+    strategy:
+      matrix:
+        build_type: [Debug, RelWithDebInfo]
+      fail-fast: false
 
     steps:
       - name: Install git
@@ -30,11 +52,16 @@ jobs:
         run: |
           cmake -B build \
             -G Ninja \
-            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DBUILD_TESTING=${{ matrix.build_type == 'Debug' && 'ON' || 'OFF' }} \
             -DCMAKE_UNITY_BUILD=ON
 
       - name: Build
         run: cmake --build build --parallel
+
+      - name: Run tests (Debug only)
+        if: matrix.build_type == 'Debug'
+        run: ctest --test-dir build --output-on-failure --timeout 60
 
       - name: Install
         run: cmake --install build --prefix install_dir
@@ -42,5 +69,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: lingmo-style
+          name: lingmo-style-${{ matrix.build_type }}
           path: install_dir/
