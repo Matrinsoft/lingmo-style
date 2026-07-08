@@ -7,6 +7,7 @@
 #include <QProxyStyle>
 #include <QPalette>
 #include <QFont>
+#include <QIcon>
 
 #include <memory>
 
@@ -55,7 +56,7 @@ public:
     QIcon standardIcon(StandardPixmap standardIcon, const QStyleOption *option = nullptr,
                        const QWidget *widget = nullptr) const override;
 
-    QPixmap generatedIconPixmap(IconMode iconMode, const QPixmap &pixmap,
+    QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
                                 const QStyleOption *option) const override;
 
     QPalette standardPalette() const override;

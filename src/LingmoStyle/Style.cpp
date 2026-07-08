@@ -866,7 +866,7 @@ QIcon Style::standardIcon(StandardPixmap standardIcon, const QStyleOption *optio
     return QProxyStyle::standardIcon(standardIcon, option, widget);
 }
 
-QPixmap Style::generatedIconPixmap(IconMode iconMode, const QPixmap &pixmap,
+QPixmap Style::generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap,
                                    const QStyleOption *option) const
 {
     return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
