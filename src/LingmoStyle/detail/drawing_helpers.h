@@ -219,7 +219,6 @@ inline void drawScrollBarHandle(QPainter *p, const QRectF &rect,
     p->setRenderHint(QPainter::Antialiasing);
 
     qreal thickness = std::min(rect.width(), rect.height());
-    qreal handleLen = (orientation == Qt::Horizontal) ? rect.width() : rect.height();
     qreal handleSize = std::max(6.0, thickness * 0.4);
 
     QRectF handleRect;

@@ -61,7 +61,6 @@ void StylePrivate::connectThemeSignals()
         rebuildPalette();
         emit q->themeChanged();
         if (auto *app = qobject_cast<QApplication *>(QCoreApplication::instance())) {
-            q->polish(*const_cast<QPalette *>(&app->palette()));
             app->setPalette(palette);
         }
     });
