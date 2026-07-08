@@ -22,8 +22,19 @@ jobs:
           apt-get install -y -qq \
             build-essential cmake debhelper dpkg-dev \
             qt6-base-dev \
-            liblingmotheme-dev \
-            libgl1-mesa-dev
+            libgl1-mesa-dev \
+            curl jq
+
+      - name: Install lingmo-theme from latest release
+        run: |
+          curl -sL -o /tmp/lt-release.json \
+            https://api.github.com/repos/Matrinsoft/lingmo-theme/releases/latest
+          DEB_DEV=$(jq -r '.assets[] | select(.name | test("liblingmotheme-dev_.*_amd64\\.deb")) | .browser_download_url' /tmp/lt-release.json)
+          DEB_LIB=$(jq -r '.assets[] | select(.name | test("liblingmotheme1_.*_amd64\\.deb") and (.name | contains("dbgsym") | not)) | .browser_download_url' /tmp/lt-release.json)
+          curl -sL -o /tmp/lingmo-theme-dev.deb "$DEB_DEV"
+          curl -sL -o /tmp/lingmo-theme-lib.deb "$DEB_LIB"
+          dpkg -i /tmp/lingmo-theme-lib.deb /tmp/lingmo-theme-dev.deb || apt-get install -f -y
+          rm -f /tmp/lingmo-theme-*.deb /tmp/lt-release.json
 
       - name: Build Debian package
         run: |
@@ -51,8 +62,19 @@ jobs:
         run: |
           dnf install -y cmake ninja-build rpm-build \
             qt6-qtbase-devel \
-            lingmo-theme-devel \
-            mesa-libGL-devel
+            mesa-libGL-devel \
+            curl jq
+
+      - name: Install lingmo-theme from latest release
+        run: |
+          curl -sL -o /tmp/lt-release.json \
+            https://api.github.com/repos/Matrinsoft/lingmo-theme/releases/latest
+          RPM_DEVEL=$(jq -r '.assets[] | select(.name | test("lingmo-theme-devel-.*\\.rpm") and (.name | test("debug") | not)) | .browser_download_url' /tmp/lt-release.json)
+          RPM_LIBS=$(jq -r '.assets[] | select(.name | test("lingmo-theme-libs-.*\\.rpm") and (.name | test("debug") | not)) | .browser_download_url' /tmp/lt-release.json)
+          curl -sL -o /tmp/lingmo-theme-devel.rpm "$RPM_DEVEL"
+          curl -sL -o /tmp/lingmo-theme-libs.rpm "$RPM_LIBS"
+          dnf install -y /tmp/lingmo-theme-libs.rpm /tmp/lingmo-theme-devel.rpm
+          rm -f /tmp/lingmo-theme-*.rpm /tmp/lt-release.json
 
       - name: Build RPM
         run: |
