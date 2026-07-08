@@ -2,7 +2,7 @@ set(CMAKE_AUTOMOC ON)
 
 function(add_lingmo_style_test NAME)
     add_executable(${NAME} ${NAME}.cpp)
-    target_link_libraries(${NAME} PRIVATE Lingmo::Style Qt6::Test)
+    target_link_libraries(${NAME} PRIVATE LingmoStyle Qt6::Test)
     target_compile_definitions(${NAME} PRIVATE
         DATA_DIR="${CMAKE_SOURCE_DIR}/data"
     )
@@ -24,7 +24,7 @@ add_executable(tst_StylePlugin
 target_include_directories(tst_StylePlugin PRIVATE
     ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin
 )
-target_link_libraries(tst_StylePlugin PRIVATE Lingmo::Style Qt6::Test)
+target_link_libraries(tst_StylePlugin PRIVATE LingmoStyle Qt6::Test)
 set_target_properties(tst_StylePlugin PROPERTIES UNITY_BUILD OFF)
 add_test(NAME tst_StylePlugin COMMAND tst_StylePlugin)
 set_tests_properties(tst_StylePlugin PROPERTIES TIMEOUT 30)
