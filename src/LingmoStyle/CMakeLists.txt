@@ -34,7 +34,7 @@ target_include_directories(LingmoStyle
 target_link_libraries(LingmoStyle
     PUBLIC
         Qt6::Widgets
-        Lingmo::Theme
+        Lingmo::LingmoTheme
 )
 
 target_compile_definitions(LingmoStyle PRIVATE LINGMOSTYLE_LIBRARY)
