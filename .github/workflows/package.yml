@@ -29,10 +29,13 @@ jobs:
         run: |
           curl -sL -o /tmp/lt-release.json \
             https://api.github.com/repos/Matrinsoft/lingmo-theme/releases/latest
-          DEB_DEV=$(jq -r '.assets[] | select(type == "object") | select(.name | test("liblingmotheme-dev_.*_amd64\\.deb")) | .browser_download_url' /tmp/lt-release.json)
-          DEB_LIB=$(jq -r '.assets[] | select(type == "object") | select(.name | test("liblingmotheme1_.*_amd64\\.deb") and (.name | contains("dbgsym") | not)) | .browser_download_url' /tmp/lt-release.json)
-          curl -sL -o /tmp/lingmo-theme-dev.deb "$DEB_DEV"
-          curl -sL -o /tmp/lingmo-theme-lib.deb "$DEB_LIB"
+          TAG=$(jq -r '.tag_name' /tmp/lt-release.json)
+          DEB_DEV_URL=$(grep -o '"browser_download_url":"[^"]*liblingmotheme-dev[^"]*amd64.deb"' /tmp/lt-release.json | sed 's/.*":"//;s/"$//' | head -1)
+          DEB_LIB_URL=$(grep -o '"browser_download_url":"[^"]*liblingmotheme1[^"]*amd64.deb"' /tmp/lt-release.json | grep -v dbgsym | sed 's/.*":"//;s/"$//' | head -1)
+          [ -z "$DEB_DEV_URL" ] && DEB_DEV_URL="https://github.com/Matrinsoft/lingmo-theme/releases/download/${TAG}/liblingmotheme-dev_1.0.0_amd64.deb"
+          [ -z "$DEB_LIB_URL" ] && DEB_LIB_URL="https://github.com/Matrinsoft/lingmo-theme/releases/download/${TAG}/liblingmotheme1_1.0.0_amd64.deb"
+          curl -sL -o /tmp/lingmo-theme-dev.deb "$DEB_DEV_URL"
+          curl -sL -o /tmp/lingmo-theme-lib.deb "$DEB_LIB_URL"
           dpkg -i /tmp/lingmo-theme-lib.deb /tmp/lingmo-theme-dev.deb || apt-get install -f -y
           rm -f /tmp/lingmo-theme-*.deb /tmp/lt-release.json
 
@@ -69,10 +72,13 @@ jobs:
         run: |
           curl -sL -o /tmp/lt-release.json \
             https://api.github.com/repos/Matrinsoft/lingmo-theme/releases/latest
-          RPM_DEVEL=$(jq -r '.assets[] | select(type == "object") | select(.name | test("lingmo-theme-devel-.*\\.rpm") and (.name | test("debug") | not)) | .browser_download_url' /tmp/lt-release.json)
-          RPM_LIBS=$(jq -r '.assets[] | select(type == "object") | select(.name | test("lingmo-theme-libs-.*\\.rpm") and (.name | test("debug") | not)) | .browser_download_url' /tmp/lt-release.json)
-          curl -sL -o /tmp/lingmo-theme-devel.rpm "$RPM_DEVEL"
-          curl -sL -o /tmp/lingmo-theme-libs.rpm "$RPM_LIBS"
+          TAG=$(jq -r '.tag_name' /tmp/lt-release.json)
+          RPM_DEVEL_URL=$(grep -o '"browser_download_url":"[^"]*lingmo-theme-devel[^"]*\.rpm"' /tmp/lt-release.json | grep -v debug | sed 's/.*":"//;s/"$//' | head -1)
+          RPM_LIBS_URL=$(grep -o '"browser_download_url":"[^"]*lingmo-theme-libs[^"]*\.rpm"' /tmp/lt-release.json | grep -v debug | sed 's/.*":"//;s/"$//' | head -1)
+          [ -z "$RPM_DEVEL_URL" ] && RPM_DEVEL_URL="https://github.com/Matrinsoft/lingmo-theme/releases/download/${TAG}/lingmo-theme-devel-1.0.0-1.fc44.x86_64.rpm"
+          [ -z "$RPM_LIBS_URL" ] && RPM_LIBS_URL="https://github.com/Matrinsoft/lingmo-theme/releases/download/${TAG}/lingmo-theme-libs-1.0.0-1.fc44.x86_64.rpm"
+          curl -sL -o /tmp/lingmo-theme-devel.rpm "$RPM_DEVEL_URL"
+          curl -sL -o /tmp/lingmo-theme-libs.rpm "$RPM_LIBS_URL"
           dnf install -y /tmp/lingmo-theme-libs.rpm /tmp/lingmo-theme-devel.rpm
           rm -f /tmp/lingmo-theme-*.rpm /tmp/lt-release.json
 
