@@ -52,8 +52,8 @@ jobs:
         run: |
           curl -sL -o /tmp/lt-release.json \
             https://api.github.com/repos/Matrinsoft/lingmo-theme/releases/latest
-          DEB_DEV=$(jq -r '.assets[] | select(.name | test("liblingmotheme-dev_.*_amd64\\.deb")) | .browser_download_url' /tmp/lt-release.json)
-          DEB_LIB=$(jq -r '.assets[] | select(.name | test("liblingmotheme1_.*_amd64\\.deb") and (.name | contains("dbgsym") | not)) | .browser_download_url' /tmp/lt-release.json)
+          DEB_DEV=$(jq -r '.assets[] | select(type == "object") | select(.name | test("liblingmotheme-dev_.*_amd64\\.deb")) | .browser_download_url' /tmp/lt-release.json)
+          DEB_LIB=$(jq -r '.assets[] | select(type == "object") | select(.name | test("liblingmotheme1_.*_amd64\\.deb") and (.name | contains("dbgsym") | not)) | .browser_download_url' /tmp/lt-release.json)
           curl -sL -o /tmp/lingmo-theme-dev.deb "$DEB_DEV"
           curl -sL -o /tmp/lingmo-theme-lib.deb "$DEB_LIB"
           dpkg -i /tmp/lingmo-theme-lib.deb /tmp/lingmo-theme-dev.deb || apt-get install -f -y
