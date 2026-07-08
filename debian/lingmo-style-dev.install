@@ -1,0 +1,3 @@
+usr/include/LingmoStyle/*.h
+usr/lib/*/cmake/LingmoStyle/*.cmake
+usr/lib/*/libLingmoStyle.so

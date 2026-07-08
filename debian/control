@@ -1,0 +1,30 @@
+Source: lingmo-style
+Section: libs
+Priority: optional
+Maintainer: Lingmo OS Team <team@lingmo.org>
+Build-Depends: debhelper-compat (= 13),
+               cmake (>= 3.21),
+               qt6-base-dev (>= 6.5),
+               liblingmotheme-dev (>= 1.0)
+Standards-Version: 4.6.2
+Rules-Requires-Root: no
+
+Package: lingmo-style
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Lingmo Desktop - Qt Widgets Style
+ Lingmo Style provides a QProxyStyle-based Qt Widgets style implementation
+ for the Lingmo Desktop environment. It reads design tokens from lingmo-theme
+ and ensures that Qt Widgets applications share the same visual design as
+ QML applications.
+
+Package: lingmo-style-dev
+Architecture: any
+Section: libdevel
+Depends: lingmo-style (= ${binary:Version}),
+         liblingmotheme-dev (>= 1.0),
+         qt6-base-dev (>= 6.5),
+         ${misc:Depends}
+Description: Lingmo Desktop - Qt Widgets Style (development files)
+ This package contains the development headers and CMake integration
+ for Lingmo Style.

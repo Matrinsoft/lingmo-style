@@ -1,0 +1,15 @@
+build/
+build-*
+*.user
+*.autosave
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+node_modules/
+.obj/
+.moc/
+.rcc/
+.ui/
+*.pro.user
+CMakeUserPresets.json
