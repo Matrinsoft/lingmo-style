@@ -108,7 +108,7 @@ inline void setColorGroup(QPalette &palette, QPalette::ColorGroup group,
     set(QPalette::BrightText, isDark(bg) ? QColor(255, 255, 255) : QColor(0, 0, 0));
 }
 
-inline QPalette paletteFromColorSet(const ColorPalette &cp, ColorScheme scheme)
+inline QPalette paletteFromColorSet(const ColorPalette &cp, ColorScheme /*scheme*/)
 {
     QPalette palette;
 

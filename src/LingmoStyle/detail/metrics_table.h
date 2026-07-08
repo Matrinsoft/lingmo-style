@@ -93,7 +93,6 @@ inline const auto &metricsTable()
 
         // ── Header metrics ────────────────────────────────
         { QStyle::PM_HeaderMargin,           [](const Theme &t) { return qRound(t.metrics().spacingSmall()); } },
-        { QStyle::PM_HeaderStartWidth,       [](const Theme &)  { return 20; } },
         { QStyle::PM_HeaderGripMargin,       [](const Theme &)  { return 0; } },
 
         // ── Progress bar metrics ──────────────────────────

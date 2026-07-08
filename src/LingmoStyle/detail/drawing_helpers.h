@@ -5,6 +5,7 @@
 #include <LingmoTheme/Metrics.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QStyleOption>
 #include <QWidget>
 

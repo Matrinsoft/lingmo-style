@@ -6,6 +6,7 @@
 #include <detail/drawing_helpers.h>
 
 #include <QApplication>
+#include <QAbstractButton>
 #include <QStyleOption>
 #include <QStyleOptionButton>
 #include <QStyleOptionFrame>
@@ -13,6 +14,8 @@
 #include <QStyleOptionComboBox>
 #include <QStyleOptionSlider>
 #include <QStyleOptionSpinBox>
+
+using namespace Lingmo::Detail;
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
 #include <QStyleOptionHeader>
@@ -218,7 +221,6 @@ void Style::drawPrimitive(PrimitiveElement element, const QStyleOption *option,
     case PE_IndicatorBranch: {
         int midX = option->rect.center().x();
         int midY = option->rect.center().y();
-        int h = option->rect.height();
 
         painter->setPen(QPen(cp.border(), 1));
 
@@ -394,14 +396,16 @@ void Style::drawControl(ControlElement element, const QStyleOption *option,
         return;
     }
     case CE_MenuBarItem: {
-        bool selected = option->state & State_Selected;
+        auto *mi = qstyleoption_cast<const QStyleOptionMenuItem *>(option);
+        bool selected = option->state & State_Selected && mi;
         if (selected) {
             painter->fillRect(option->rect, cp.highlight());
             painter->setPen(cp.highlightForeground());
         } else {
             painter->setPen(cp.foreground());
         }
-        painter->drawText(option->rect, Qt::AlignCenter, option->text);
+        if (mi && !mi->text.isEmpty())
+            painter->drawText(option->rect, Qt::AlignCenter, mi->text);
         return;
     }
     case CE_TabBarTab: {
@@ -813,8 +817,6 @@ int Style::styleHint(StyleHint hint, const QStyleOption *option,
         return QDialogButtonBox::WinLayout;
     case SH_ItemView_ShowDecorationSelected:
         return 1;
-    case SH_TableWidget_ItemView_SelectActiveRow:
-        return 1;
     case SH_ToolBar_Movable:
         return 0;
     case SH_Menu_SubMenuPopupDelay:
@@ -827,8 +829,6 @@ int Style::styleHint(StyleHint hint, const QStyleOption *option,
         return 1;
     case SH_GroupBox_TextLabelColor:
         return d->theme ? d->theme->palette().foreground().rgba() : 0;
-    case SH_RequestMenuButtonAccelerator:
-        return 0;
     case SH_Menu_Scrollable:
         return 1;
     case SH_ProgressDialog_CenterCancelButton:
