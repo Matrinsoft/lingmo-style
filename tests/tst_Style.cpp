@@ -5,6 +5,8 @@
 #include <QPalette>
 #include <QTest>
 #include <QSignalSpy>
+#include <QStyleOptionButton>
+#include <QAbstractItemView>
 
 class tst_Style : public QObject
 {

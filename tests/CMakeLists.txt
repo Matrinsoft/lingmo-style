@@ -3,6 +3,9 @@ set(CMAKE_AUTOMOC ON)
 function(add_lingmo_style_test NAME)
     add_executable(${NAME} ${NAME}.cpp)
     target_link_libraries(${NAME} PRIVATE LingmoStyle Qt6::Test)
+    target_include_directories(${NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/LingmoStyle
+    )
     target_compile_definitions(${NAME} PRIVATE
         DATA_DIR="${CMAKE_SOURCE_DIR}/data"
     )
@@ -22,6 +25,7 @@ add_executable(tst_StylePlugin
     ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin/StylePlugin.cpp
 )
 target_include_directories(tst_StylePlugin PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/LingmoStyle
     ${CMAKE_SOURCE_DIR}/src/LingmoStyle/plugin
 )
 target_link_libraries(tst_StylePlugin PRIVATE LingmoStyle Qt6::Test)
